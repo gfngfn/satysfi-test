@@ -7,7 +7,7 @@ let-inline ctx \gr wid hgt dpt path =
     let pathS = shift-path ptorg path in
     let (pt1, pt2) = get-path-bbox pathS in
     [
-      stroke 1pt Color.black (shift-path ptorg (Gr.rectangle (0cm, 0cm -' dpt) (wid, hgt)));
+      shift-graphics ptorg (stroke 1pt Color.black (Gr.rectangle (0cm, 0cm -' dpt) (wid, hgt)));
       fill Color.yellow (Gr.rectangle pt1 pt2);
       fill Color.red pathS;
     ]
