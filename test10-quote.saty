@@ -1,0 +1,35 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+
+let-inline ctx \q inner =
+  let ib-after = read-inline ctx {«\ } in
+  let ctxq =
+    ctx |> set-every-word-break inline-nil ib-after
+  in
+  read-inline ctxq {« #inner; »}
+
+let-inline ctx \name inner =
+  read-inline (ctx |> set-font Latin (`lmmono`, 1., 0.)) inner
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    \q{
+      The original problem to be solved was
+      for fine French typesetting,
+      in which guillemets are placed
+      running down the left side of a paragraph,
+      as in this paragraph,
+      so long as material is being quoted.
+    }
+    Since \TeX; breaks paragraphs in arbitrary places,
+    it was impossible to develop a robust macro package
+    that could, in a single pass, place the guillemets
+    in the right positions.
+    \SATySFi; enables us to realize it
+    by using primitive \name{set-every-word-break}.
+  }
+>

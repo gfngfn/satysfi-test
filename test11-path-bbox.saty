@@ -1,0 +1,35 @@
+@require: stdja
+@require: gr
+@require: color
+
+let-inline ctx \gr wid hgt dpt path =
+  inline-graphics wid hgt dpt (fun ptorg -> (
+    let pathS = shift-path ptorg path in
+    let (pt1, pt2) = get-path-bbox pathS in
+    [
+      stroke 1pt Color.black (shift-path ptorg (Gr.rectangle (0cm, 0cm -' dpt) (wid, hgt)));
+      fill Color.yellow (Gr.rectangle pt1 pt2);
+      fill Color.red pathS;
+    ]
+  ))
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    \gr(5cm)(5cm)(1cm)(
+      start-path (1cm, 1cm)
+        |> line-to (2cm, 4cm)
+        |> line-to (4cm, 2cm)
+        |> close-with-line
+    );
+    \gr(5cm)(5cm)(1cm)(
+      start-path (1cm, 1cm)
+        |> bezier-to (0cm -' 1cm, 4cm) (8cm, 7cm) (4.5cm, 3cm)
+        |> line-to (5cm, 1cm)
+        |> close-with-bezier (4cm, 0cm -' 1cm) (1cm, 0cm -' 3cm)
+    );
+  }
+>

@@ -1,0 +1,15 @@
+@require: stdja
+
+document (|
+  title = {Sample Document};
+  author = {Takashi SUWA};
+  show-title = true;
+  show-toc = false;
+|) '<
+  +section {Sample Section} <
+    +p {
+      Hello, this is \SATySFi;!
+      もちろん日本語の文章を組むこともできます。
+    }
+  >
+>

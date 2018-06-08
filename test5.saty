@@ -1,0 +1,10 @@
+
+module Multiarg : sig
+  type 'k 'v pair
+
+  val singleton : 'k -> 'v -> 'k 'v pair
+end = struct
+  type 'k 'v pair = Pair of 'k * 'v
+
+  let singleton k v = Pair (k, v)
+end

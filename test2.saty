@@ -1,0 +1,19 @@
+@require: stdja
+
+let apply : ('a -> 'b) -> 'a -> 'b
+  | f x = f x
+
+let-inline \show s =
+  embed-string s
+in
+
+document (|
+  title = {Test 2};
+  author = {gfn};
+  show-title = false;
+  show-toc = false;
+|) '<
+  +p{
+    \show(arabic 42);
+  }
+>

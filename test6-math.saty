@@ -1,0 +1,25 @@
+@require: stdja
+@require: math
+
+document (|
+  title = {Math Test};
+  author = {gfn};
+  show-title = true;
+  show-toc = false;
+|) '<
+  +p{Test:}
+  +math(${\paren{abc\frac{x}{2}W\int}^{\frac{1}{3}}d});
+  +math(${\paren{\upper{\lower{\sum}{i = 1}}{n} x_i}^{\frac{1}{3}},
+          \paren{\upper{\lower{\sum}{i = 1}}{n} x_i}^{3}});
+  +math(${\paren{\lower{\sum}{i = 1} x_i}^{\frac{1}{3}},
+          \paren{\upper{\sum}{n} x_i}^{\frac{1}{3}}});
+  +math(${\paren{\frac{}{5}}^{\frac{1}{3}},
+          \paren{\frac{5}{}}^{\frac{1}{3}}});
+  +math(${\sqrt{\upper{\lower{\sum}{i = 1}}{n} x_i^2}});
+  +math(${\paren{x}^{\frac{1}{3}}, \paren{x}^{3}});
+  +math(${\paren{x}^{\int}});
+  +math(${\paren{x}^{\frac{1}{3+5+7}}});
+  +math(${x^\frac{1}{3}});
+  +math(${\paren{x}_{\frac{1}{3}}});
+  +math(${\paren{x}_{\frac{1}{3+5+7}}});
+>

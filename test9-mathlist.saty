@@ -1,0 +1,31 @@
+@require: stdja
+@require: progsynt
+
+let-block ctx +math-list mlst =
+  mlst |> List.fold-left (fun bbacc m -> (
+    let ib = inline-fil ++ (embed-math ctx m) ++ inline-fil in
+    let bb = line-break true true ctx ib in
+    bbacc +++ bb
+  )) block-nil
+in
+
+let metax = Term.meta ${x} in
+let metae = Term.meta ${e} in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +math-list(${| E = m c^2 | F = G \frac{M m}{R^2} |});
+  +p{
+    A word is ranged over by ${w} defined by the following BNF:
+  }
+  +BNF(${w})[
+    ${| The | quick | brown | fox |};
+    ${| jumps | over | the | lazy | dog |};
+  ];
+  +BNF(${\term!(metae)})[
+    ${| \term!(metax) | \term!(Term.abs metax metae) | \term!(Term.app metae metae) |};
+    ${| \term!(Term.letin metax metae metae) |};
+  ];
+>

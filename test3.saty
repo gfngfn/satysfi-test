@@ -1,0 +1,27 @@
+@require: stdja
+
+module M1 : sig
+  type t
+  val empty : t
+end = struct
+  type t = int list
+  let empty = []
+end
+
+module M2 : sig
+  val +cmd : [M1.t] block-cmd
+end = struct
+  let-block ctx +cmd _ =
+    block-nil
+end
+
+in
+
+document (|
+  title = {Test 3};
+  author = {gfn};
+  show-title = false;
+  show-toc = false;
+|) '<
+  +M2.cmd(M1.empty);
+>

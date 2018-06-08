@@ -1,0 +1,20 @@
+@require: stdja
+@require: itemize
+
+let-inline ctx \string s =
+  read-inline ctx (embed-string s)
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +listing {
+    * [\string(` hoge `);]
+    * [\string(#` hoge `);]
+    * [\string(` hoge `#);]
+    * [\string(#` hoge `#);]
+    * [\string(`` `(,a ,b ,c)``);]
+    * [\string(#`` `(,a ,b ,c)``);]
+  }
+>

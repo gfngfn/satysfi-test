@@ -1,0 +1,6 @@
+@require: stdja
+
+let x : string = 1
+in
+
+document (||) '<>
