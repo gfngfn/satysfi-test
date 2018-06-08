@@ -1,0 +1,28 @@
+@require: stdja
+@require: cd
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    \CD.diagram(5cm)(8cm)(fun cd -> (
+      let a = cd#obj (1cm, 3cm) ${A} in
+      let b = cd#obj (4cm, 2cm) ${B} in
+      let c = cd#obj (1cm, 1cm) ${C} in
+      let d = cd#obj (4cm, 7cm) ${D} in
+      [
+        cd#draw-obj a;
+        cd#draw-obj b;
+        cd#draw-obj c;
+        cd#draw-obj d;
+        cd#draw-arr ${f} a b;
+        cd#draw-arr ${g} a c;
+        cd#draw-arr ${h} b c;
+        cd#draw-arr ${i} a d;
+        cd#draw-arr ${j} c d;
+        cd#draw-arr ${k} b d;
+      ] |> List.concat
+    ));
+  }
+>
