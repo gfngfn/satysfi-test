@@ -6,22 +6,40 @@ document (|
   show-title = false; show-toc = false;
 |) '<
   +p{
-    \CD.diagram(5cm)(8cm)(fun cd -> (
-      let a = cd#obj (1cm, 3cm) ${A} in
-      let b = cd#obj (4cm, 2cm) ${B} in
-      let c = cd#obj (1cm, 1cm) ${C} in
-      let d = cd#obj (4cm, 7cm) ${D} in
+    \CD.diagram(5cm)(7cm)(fun cd -> (
+      let di = cd#obj (1cm, 3cm) ${D i} in
+      let dj = cd#obj (1cm, 1cm) ${D j} in
+      let l = cd#obj (4cm, 2cm) ${\colim D} in
+      let a = cd#obj (4cm, 6cm) ${A} in
       [
+        cd#draw-obj di;
+        cd#draw-obj dj;
+        cd#draw-obj l;
         cd#draw-obj a;
-        cd#draw-obj b;
-        cd#draw-obj c;
-        cd#draw-obj d;
-        cd#draw-arr ${f} a b;
-        cd#draw-arr ${g} a c;
-        cd#draw-arr ${h} b c;
-        cd#draw-arr ${i} a d;
-        cd#draw-arr ${j} c d;
-        cd#draw-arr ${k} b d;
+        cd#draw-arr ${D \alpha} 0.5  2pt di dj;
+        cd#draw-arr ${\phi_i}   0.7  5pt di l;
+        cd#draw-arr ${\phi_j}   0.7  5pt dj l;
+        cd#draw-arr ${\theta_i} 0.3  4pt di a;
+        cd#draw-arr ${\theta_j} 0.5  4pt dj a;
+        cd#draw-arr ${h}        0.5  2pt l a;
+      ] |> List.concat
+    ));
+    \CD.diagram(5cm)(7cm)(fun cd -> (
+      let di = cd#obj (1cm, 3cm) ${D i} in
+      let dj = cd#obj (1cm, 1cm) ${D j} in
+      let l = cd#obj (4cm, 2cm) ${\lim D} in
+      let a = cd#obj (4cm, 6cm) ${A} in
+      [
+        cd#draw-obj di;
+        cd#draw-obj dj;
+        cd#draw-obj l;
+        cd#draw-obj a;
+        cd#draw-arr ${D \alpha} 0.5  2pt di dj;
+        cd#draw-arr ${\phi_i}   0.4  8pt l di;
+        cd#draw-arr ${\phi_j}   0.3 12pt l dj;
+        cd#draw-arr ${\theta_i} 0.5  6pt a di;
+        cd#draw-arr ${\theta_j} 0.55 5pt a dj;
+        cd#draw-arr ${h}        0.5  2pt a l;
       ] |> List.concat
     ));
   }
