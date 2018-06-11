@@ -21,7 +21,7 @@ document (|
         cd#draw-arr ${\phi_j}   0.7  5pt dj l;
         cd#draw-arr ${\theta_i} 0.3  4pt di a;
         cd#draw-arr ${\theta_j} 0.5  4pt dj a;
-        cd#draw-arr ${h}        0.5  2pt l a;
+        cd#draw-dashed-arr ${h} 0.5  2pt l a;
       ] |> List.concat
     ));
     \CD.diagram(5cm)(7cm)(fun cd -> (
@@ -39,7 +39,7 @@ document (|
         cd#draw-arr ${\phi_j}   0.3 12pt l dj;
         cd#draw-arr ${\theta_i} 0.5  6pt a di;
         cd#draw-arr ${\theta_j} 0.55 5pt a dj;
-        cd#draw-arr ${h}        0.5  2pt a l;
+        cd#draw-dashed-arr ${h} 0.5  2pt a l;
       ] |> List.concat
     ));
   }
