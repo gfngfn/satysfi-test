@@ -1,0 +1,32 @@
+
+@require: stdja
+
+let-math \concat1 m1 m2 =
+  ${#m1#m2}
+
+let-math \concat2 m1 m2 =
+  text-in-math MathOrd (fun ctx -> (
+    let ib1 = embed-math ctx m1 in
+    let ib2 = embed-math ctx m2 in
+      match space-between-maths ctx m1 m2 with
+      | None           -> ib1 ++ ib2
+      | Some(ib-space) -> ib1 ++ ib-space ++ ib2
+  ))
+
+let-math \concat3 m1 m2 =
+  text-in-math MathOrd (fun ctx -> (
+    let ib1 = embed-math ctx m1 in
+    let ib2 = embed-math ctx m2 in
+      ib1 ++ ib2
+  ))
+
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{ ${\concat1{A}{B}, \concat1{A}{+ B}, \concat1{A}{= B}} }
+  +p{ ${\concat2{A}{B}, \concat2{A}{+ B}, \concat2{A}{= B}} }
+  +p{ ${\concat3{A}{B}, \concat3{A}{+ B}, \concat3{A}{= B}} }
+>

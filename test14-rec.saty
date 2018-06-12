@@ -1,0 +1,16 @@
+@require: stdja
+
+let-inline \repeat n it =
+  let-rec aux n it =
+    if n <= 0 then {} else
+      let it-after = aux (n - 1) it in {#it;#it-after;}
+  in
+    aux n it
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{\repeat(2){hoge}}
+>
