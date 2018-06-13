@@ -1,0 +1,37 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+@require: math
+
+let-math \sums m1 m2 = ${\upper{\lower{\sum}{#m1}}{#m2}}
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +align[
+    ${| \paren{x - \alpha} \paren{x - \beta}
+        |= x^2 - \paren{\alpha + \beta} x + \alpha \beta  |};
+    ${| |= x^2 + \frac{b}{a} x + \frac{c}{a} |};
+  ];
+  +p{
+    Cauchy–Schwarzの不等式：
+    ${\paren{\sums{i = 1}{n} x_i y_i}^2 \leq \paren{\sums{i = 1}{n} x_i^2} \paren{\sums{i = 1}{n} y_i^2}}
+    を示す．帰納法による．${n = 1, 2} のときは容易に確かめられる．${n = m + 1 \geq 3} のときは，
+  }
+  +align(
+    let sumsm = ${\sums{i = 1}{m}} in
+    [
+      ${| \paren{\sums{i = 1}{m + 1} x_i y_i}^2
+          |= \paren{\sums{i = 1}{m} x_i x_y + x_{m + 1} y_{m + 1}}^2 |};
+
+      ${| |\leq \paren{\sqrt{#sumsm x_i^2} \sqrt{#sumsm y_i^2} + x_{m + 1} y_{m + 1}}^2
+            | \math-skip!(2cm)\paren{\text!{${m} に関する帰納法の仮定より}} |};
+
+      ${| |\leq \paren{#sumsm x_i^2 + x_{m + 1}^2} \paren{#sumsm y_i^2 + y_{m + 1}^2}
+            | \math-skip!(2cm)\paren{\text!{${n = 2} のときより}}|};
+
+      ${| |= \paren{\sums{i = 1}{m + 1} x_i^2} \paren{\sums{i = 1}{m + 1} y_i^2} |}
+    ]
+  );
+>

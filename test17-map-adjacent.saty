@@ -1,0 +1,30 @@
+@require: stdja
+@require: list
+
+let-inline ctx \show lst =
+  lst |> List.map-adjacent (fun x xLopt xRopt -> (
+    let sL =
+      match xLopt with
+      | None     -> `*[`
+      | Some(xL) -> xL ^ `[`
+    in
+    let sR =
+      match xRopt with
+      | None     -> `]*`
+      | Some(xR) -> `]` ^ xR
+    in
+      `(` ^ sL ^ x ^ sR ^ `)`
+  )) |> List.fold-left (fun acc s -> (
+    acc ++ read-inline ctx (embed-string s)
+  )) inline-nil
+
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{ \show[`the`]; }
+  +p{ \show[`the`; `fox`]; }
+  +p{ \show[`the`; `quick`; `brown`; `fox`; `jumps`]; }
+>
