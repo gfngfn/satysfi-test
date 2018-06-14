@@ -1,0 +1,12 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+@require: math
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    ${\mathbf-token!(`Var`), \mathbf{Var}}
+  }
+>
