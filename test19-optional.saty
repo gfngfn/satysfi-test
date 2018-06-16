@@ -1,0 +1,20 @@
+
+let f ?:t x =
+  match t with
+  | None    -> x
+  | Some(y) -> x + y
+in
+
+let h g =
+  (g ?:1 true, g false)
+in
+
+let i r =
+  (r#func ?:1cm 0, r#func 42)
+in
+
+let j g x =
+  (g ?:x, g)
+in
+
+j

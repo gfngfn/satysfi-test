@@ -1,0 +1,16 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+@require: math
+
+let-math \setN = ${\mathbf{N}}
+let-math \downset m = ${\app{\mathord{\downarrow}}{#m}}
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{ ${\downset{y} \coloneq \setsep{x \in S}{x \preccurlyeq y}} }
+  +p{ ${\setsep{\paren{a_i}_{i \in \setN}}{
+          \sum_{i \in \setN} a_i < + \infty}} }
+>
