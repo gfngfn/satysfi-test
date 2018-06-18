@@ -4,14 +4,14 @@
 module Tree : sig
   type t
   val empty : t
-  val leaf : int -> t
+  val (!) : int -> t
   val node : int -> t -> t -> t
   val show : t -> string
 end = struct
   type t = Empty | Node of int * t * t
   let empty = Empty
   let node x t1 t2 = Node(x, t1, t2)
-  let leaf x = Node(x, Empty, Empty)
+  let (!) x = Node(x, Empty, Empty)
 
   let-rec show
     | (Empty)           = ` `
@@ -28,10 +28,10 @@ document (|
   show-title = false; show-toc = false;
 |) '<
   +p{
-    \string(open Tree in show (node 3 (leaf 1) (leaf 4)));,
-    \string(Tree.(show (node 3 (leaf 1) (leaf 4))));.
+    \string(open Tree in show (node 3 (! 1) (! 4)));,
+    \string(Tree.(show (node 3 (! 1) (! 4))));.
   }
   +p{
-    \string(Tree.(show (node 3 (leaf 1) (node 4 (node 1 (leaf 5) (leaf 9)) (leaf 2)))));
+    \string(Tree.(show (node 3 (! 1) (node 4 (node 1 (! 5) (! 9)) (! 2)))));
   }
 >
