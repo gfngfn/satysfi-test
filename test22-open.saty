@@ -1,0 +1,37 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+
+module Tree : sig
+  type t
+  val empty : t
+  val leaf : int -> t
+  val node : int -> t -> t -> t
+  val show : t -> string
+end = struct
+  type t = Empty | Node of int * t * t
+  let empty = Empty
+  let node x t1 t2 = Node(x, t1, t2)
+  let leaf x = Node(x, Empty, Empty)
+
+  let-rec show
+    | (Empty)           = ` `
+    | (Node(x, t1, t2)) = `(` ^ (show t1) ^ (arabic x) ^ (show t2) ^ `)`
+end
+
+let-inline \string s =
+  embed-string s
+
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    \string(open Tree in show (node 3 (leaf 1) (leaf 4)));,
+    \string(Tree.(show (node 3 (leaf 1) (leaf 4))));.
+  }
+  +p{
+    \string(Tree.(show (node 3 (leaf 1) (node 4 (node 1 (leaf 5) (leaf 9)) (leaf 2)))));
+  }
+>
