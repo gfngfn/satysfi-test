@@ -1,12 +1,19 @@
 @require: stdja
 @require: cd
 
+let-inline ctx \hoge t =
+  t
+in
+
 document (|
   title = {Sample Document}; author = {gfn};
   show-title = false; show-toc = false;
 |) '<
   +p{
     \CD.diagram(5cm)(7cm)(fun cd -> (
+      let arr m t len o1 o2 =
+        cd#draw-arr m ?:t ?:len o1 o2
+      in
       let di = cd#obj (1cm, 3cm) ${D i} in
       let dj = cd#obj (1cm, 1cm) ${D j} in
       let l = cd#obj (4cm, 2cm) ${\colim D} in
@@ -16,15 +23,18 @@ document (|
         cd#draw-obj dj;
         cd#draw-obj l;
         cd#draw-obj a;
-        cd#draw-arr ${D \alpha} 0.5  2pt di dj;
-        cd#draw-arr ${\phi_i}   0.7  5pt di l;
-        cd#draw-arr ${\phi_j}   0.7  5pt dj l;
-        cd#draw-arr ${\theta_i} 0.3  4pt di a;
-        cd#draw-arr ${\theta_j} 0.5  4pt dj a;
-        cd#draw-dashed-arr ${h} 0.5  2pt l a;
+        arr ${D \alpha} 0.5  2pt di dj;
+        arr ${\phi_i}   0.7  5pt di l;
+        arr ${\phi_j}   0.7  5pt dj l;
+        arr ${\theta_i} 0.3  4pt di a;
+        arr ${\theta_j} 0.5  4pt dj a;
+        cd#draw-dashed-arr ${h} ?:0.5 ?:2pt l a;
       ] |> List.concat
     ));
     \CD.diagram(5cm)(7cm)(fun cd -> (
+      let arr m t len o1 o2 =
+        cd#draw-arr m ?:t ?:len o1 o2
+      in
       let di = cd#obj (1cm, 3cm) ${D i} in
       let dj = cd#obj (1cm, 1cm) ${D j} in
       let l = cd#obj (4cm, 2cm) ${\lim D} in
@@ -34,12 +44,12 @@ document (|
         cd#draw-obj dj;
         cd#draw-obj l;
         cd#draw-obj a;
-        cd#draw-arr ${D \alpha} 0.5  2pt di dj;
-        cd#draw-arr ${\phi_i}   0.4  8pt l di;
-        cd#draw-arr ${\phi_j}   0.3 12pt l dj;
-        cd#draw-arr ${\theta_i} 0.5  6pt a di;
-        cd#draw-arr ${\theta_j} 0.55 5pt a dj;
-        cd#draw-dashed-arr ${h} 0.5  2pt a l;
+        arr ${D \alpha} 0.5  2pt di dj;
+        arr ${\phi_i}   0.4  8pt l di;
+        arr ${\phi_j}   0.3 12pt l dj;
+        arr ${\theta_i} 0.5  6pt a di;
+        arr ${\theta_j} 0.55 5pt a dj;
+        cd#draw-dashed-arr ${h} ?:0.5 ?:2pt a l;
       ] |> List.concat
     ));
   }

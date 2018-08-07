@@ -1,0 +1,14 @@
+
+let-inline ctx \hoge t =
+  t
+in
+
+  {
+    \hoge(fun r -> (
+      let f x y =
+%        r#foo ?:x ?* y
+        r#foo ?* ?:x y
+      in
+      (f true, r#foo 0)
+    ));
+  }

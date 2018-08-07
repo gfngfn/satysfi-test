@@ -1,0 +1,16 @@
+@require: stdja
+@require: color
+
+let-inline ctx \textcolor color inner =
+  read-inline (ctx |> set-text-color color) inner
+in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{
+    The quick \textcolor(Color.orange){brown} fox
+    jumps over the \textcolor(RGB(0., 0., 1.)){lazy} dog.
+  }
+>

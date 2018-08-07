@@ -1,0 +1,16 @@
+% -*- coding: utf-8 -*-
+@require: stdja
+@require: math
+
+let inner = ${\frac{a}{\sqrt{x^2 + 1}}} in
+
+document (|
+  title = {Sample Document}; author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{ ${\paren{X + \paren{Y + \paren{a + b}}}, \paren{#inner}} }
+  +p{ ${\brace{X + \brace{Y + \brace{a + b}}}, \brace{#inner}} }
+  +p{ ${\sqbracket{X + \sqbracket{Y + \sqbracket{a + b}}}} }
+  +p{ ${\floor{X + \floor{Y + \floor{a + b}}}} }
+  +p{ ${\ceil{X + \ceil{Y + \ceil{a + b}}}} }
+>

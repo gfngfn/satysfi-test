@@ -6,7 +6,7 @@ let f ?:t x =
 in
 
 let h g =
-  (g ?:1 true, g false)
+  (g ?:1 ?:() true, g ?* ?:1cm false)
 in
 
 let i r =
@@ -17,4 +17,4 @@ let j g x =
   (g ?:x, g)
 in
 
-j
+h
