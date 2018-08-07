@@ -1,0 +1,11 @@
+
+let-inline ctx \hoge t =
+  t
+in
+
+  {
+    \hoge(fun b f g -> (
+      let h = if b then f else g in
+        f ?:0 `foo`
+    ));
+  }
