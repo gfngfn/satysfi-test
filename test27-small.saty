@@ -1,0 +1,40 @@
+let-inline ctx \math m =
+  embed-math ctx m
+
+let f _ ?:nopt it =
+  let () = display-message `==== f` in
+  match nopt with
+  | None    -> it
+  | Some(n) -> let itn = embed-string (arabic n) in {#itn;#it;}
+
+let-inline ctx \foo it =
+  let () = display-message `==== \foo` in
+  let show s = display-message (`==== `# ^ s) in
+  let ctx =
+    ctx |> set-font-size 24pt
+        |> set-font Latin (`Menlo`, 1., 0.)
+  in
+  read-inline ctx ((show `F` before f) (show `X`) ?:(show `A` before 42) ((show `G` before f) (show `Y`) it))
+
+let doc it =
+  let ctx =
+    get-initial-context 10cm (command \math)
+      |> set-dominant-narrow-script Latin
+  in
+  let ib = read-inline ctx it in
+  let bb = line-break true true ctx (read-inline ctx it ++ inline-fil) in
+  page-break
+    A4Paper
+    (fun _ -> (|
+      text-origin = (1cm, 1cm);
+      text-height = 12cm;
+    |))
+    (fun _ -> (|
+      header-origin  = (0pt, 0pt);
+      header-content = block-nil;
+      footer-origin  = (0pt, 0pt);
+      footer-content = block-nil;
+    |))
+    bb
+in
+  doc {hoge \foo{piyo} fuga}

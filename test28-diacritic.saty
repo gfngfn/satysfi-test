@@ -1,0 +1,9 @@
+@require: stdjabook
+
+document (|
+  title = {Diacritical Marks in \SATySFi;};
+  author = {gfn};
+  show-title = false; show-toc = false;
+|) '<
+  +p{d́iaćŕit́ićaĺ ḿaŕḱś}
+>
