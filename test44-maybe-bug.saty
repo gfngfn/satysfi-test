@@ -1,0 +1,17 @@
+@require: stdja
+
+type hoge =
+| Fuga of int
+| Poyo of int * int
+
+let f h = true
+in
+document (|
+  title = {bug};
+  author = {bug};
+  show-title = false;
+  show-toc = false;
+|) (match Poyo(1,2) with
+| (Fuga(n)) when f n -> '<>
+| (Poyo(n, m)) -> '<>
+)

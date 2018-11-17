@@ -1,0 +1,14 @@
+@require: stdja
+
+let-inline \show-int n =
+  embed-string (arabic n)
+in
+
+document (|
+  title = {Programming in \SATySFi;}; show-title = false;
+  author = {計 算太郎};                 show-toc   = false;
+|) '<
+  +p{ Answer: [\show-int(
+    42 + `added string`
+);] }
+>

@@ -1,0 +1,18 @@
+@require: stdja
+
+let-inline \show-int n = embed-string (arabic n)
+let-inline \show-float x = embed-string (show-float x)
+let-inline \show-string s = embed-string s
+in
+
+let yen-to-dollar m-yen =
+  let rate = 112.73 in
+    m-yen /. rate
+in
+
+document (|
+  title = {Programming in \SATySFi;};
+  author = {計 算太郎};
+|) '<
+  +p{ Answer: \show-int(40 + 2); }
+>

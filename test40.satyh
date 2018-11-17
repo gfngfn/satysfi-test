@@ -1,0 +1,40 @@
+@require: list
+@require: table
+
+let font-latin-bold = (`ipaexg`, 1., 0.)
+
+  let make-okutsuke-page ctx-doc title date author email publisher =
+      let ctx-title =
+        ctx-doc
+        |> set-font Latin font-latin-bold
+          |> set-font-size 32pt
+          |> set-paragraph-margin 8pt 8pt
+          |> set-every-word-break inline-fil inline-fil
+      in
+      let ctx =
+        ctx-doc
+          |> set-font-size 20pt
+          |> set-paragraph-margin 8pt 8pt
+          |> set-every-word-break inline-fil inline-fil
+      in
+      let leftf ctx it =
+        line-break false false ctx
+          (read-inline ctx it ++ inline-fil)
+      in
+      let okutsuke =
+         leftf ctx { \tabular(fun t -> (
+            let (c, l, r) = (t#c, t#l, t#r) in
+            let m = t#m in
+            let e = t#e in
+            [[l {発行日}; l (embed-string date)];
+             [l {サークル}; l (embed-string author)];
+             [l {連絡先}; l (embed-string email)];
+             [l {印刷所}; l (embed-string publisher)];]
+          ))(fun xs ys -> ([])); }
+      in
+      [
+        block-skip 10cm;
+        leftf ctx (embed-string title);
+        okutsuke;
+        clear-page;
+      ] |> List.fold-left (+++) block-nil

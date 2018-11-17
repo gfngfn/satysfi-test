@@ -1,0 +1,19 @@
+@require: stdjareport
+
+let-inline ctx \movie wid hgt relpath =
+  let pads = (2pt, 2pt, 2pt, 2pt) in
+  let deco (x, y) w h d =
+    [ stroke 1pt Color.blue (Gr.rectangle (x, y +' d) (x +' w, y +' h)); ]
+  in
+  inline-frame-outer pads deco
+    (insert-external-rendition relpath `video/mp4` wid hgt)
+in
+
+document (|
+  title = {動画テスト};
+  author = {gfn};
+|) '<
+  +p{
+    \movie(8cm)(6cm)(`../../Movies/_nonmusic/14xWBKiIdCfVj6Vk.mp4`);
+  }
+>

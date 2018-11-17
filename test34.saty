@@ -1,0 +1,42 @@
+@require: stdjabook
+@require: proof
+
+let-math \tj mG mt mT = ${#mG \vdash #mt : #mT}
+
+in
+document (|
+  title = {Optional Arguments in Math};
+  author = {gfn};
+  show-title = true;
+  show-toc = false;
+|) '<
+  +p{
+    導出木にラベルをつけられるようになりました：
+    \eqn(${
+      \derive?:{\text!{(T-App)}}?:!(true){
+        | \tj{\Gamma}{e_0}{\tau' \to \tau}
+        | \derive?:{\text!{(T-App)}}?:!(true){
+            | \tj{\Gamma}{e_1}{\tau'' \to \tau'}
+            | \tj{\Gamma}{e_2}{\tau''}
+            |}{
+              \tj{\Gamma}{e_1\ e_2}{\tau'}
+            }
+        |}{
+          \tj{\Gamma}{e_0\ \paren{e_1\ e_2}}{\tau}
+        }
+    });%
+    \eqn(${
+      \derive?:{\text!{(T-App)}}{
+        | \tj{\Gamma}{e_0}{\tau' \to \tau}
+        | \derive?:{\text!{(T-App)}}{
+            | \tj{\Gamma}{e_1}{\tau'' \to \tau'}
+            | \tj{\Gamma}{e_2}{\tau''}
+            |}{
+              \tj{\Gamma}{e_1\ e_2}{\tau'}
+            }
+        |}{
+          \tj{\Gamma}{e_0\ \paren{e_1\ e_2}}{\tau}
+        }
+    });%
+  }
+>

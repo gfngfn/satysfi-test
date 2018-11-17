@@ -1,0 +1,12 @@
+@require: stdjareport
+
+let-block ctx +flush-right it =
+  line-break true true ctx (inline-fil ++ read-inline ctx it)
+in
+
+document (|
+  title = {Flush Right};
+  author = {gfn};
+|) '<
+  +flush-right{右寄せになります}
+>

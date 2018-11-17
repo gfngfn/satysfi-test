@@ -1,0 +1,30 @@
+@require: standalone
+@require: math
+
+let-block ctx +p it =
+  line-break true true ctx (read-inline ctx it ++ inline-fil)
+in
+
+let-math \lim =
+  let m-lim = math-char MathOp `lim` in
+    math-pull-in-scripts MathOp MathOp
+      (fun moptS moptT -> (
+        let m =
+          match moptS with
+          | None     -> m-lim
+          | Some(mS) -> math-lower m-lim mS
+        in
+          match moptT with
+          | None     -> m
+          | Some(mT) -> math-sup m mT
+      ))
+in
+
+standalone '<
+  +p{
+    If ${\lim_{n \to \infty} \sum_{i = 1}^{n} a_i = c} for some finite ${c},
+    then we have ${\lim_{n \to \infty} a_n = 0}.
+    Note that the converse does not hold in general\;
+    consider ${a_n \coloneq \frac{1}{n}}, for instance.
+  }
+>

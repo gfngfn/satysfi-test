@@ -1,0 +1,12 @@
+@require: standalone
+@require: math
+
+let-block ctx +p it =
+  line-break true true ctx (read-inline ctx it ++ inline-fil)
+in
+
+standalone '<
+  +p{
+    ${\Sigma^\ast}, ${\Sigma^\*}
+  }
+>

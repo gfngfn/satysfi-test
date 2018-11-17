@@ -1,0 +1,11 @@
+@require: stdjabook
+
+document (|
+  title = {Brace};
+  author = {gfn};
+  show-toc = false; show-title = true;
+|) '<
+  +p{
+    ${\brace{A + \brace{B + C}}, \brace{\frac{1}{1 + x^2}}}
+  }
+>
