@@ -1,0 +1,12 @@
+@require: stdjareport
+
+document (|
+  title = {Test};
+  author = {gfn};
+|) '<
+  +p{
+    \SATySFi;については
+    詳しくは\href?:((1pt, Color.red))(`https://github.com/gfngfn/SATySFi`){GitHubリポジトリ}を
+    ご覧ください．
+  }
+>
