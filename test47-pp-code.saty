@@ -3,25 +3,18 @@
 @import: pp-code-1
 
 let-inline-macro \pp-code@(~s) =
-  ~(
-    MetaCode.parse(s) |> List.fold-left (fun itcode elem -> (
+  ~(MetaCode.parse(s) |> List.fold-left (fun itcode elem -> (
       match elem with
       | MetaCode(s) ->
-          &(
-            let it-acc = ~itcode in
+          &(let it-acc = ~itcode in
             let it = embed-string ~(lift-string s) in
-            {#it-acc;\meta-code{#it;}}
-          )
+            {#it-acc;\meta-code{#it;}})
 
       | ObjectCode(s) ->
-          &(
-            let it-acc = ~itcode in
+          &(let it-acc = ~itcode in
             let it = embed-string ~(lift-string s) in
-            {#it-acc;\object-code{#it;}}
-          )
-
-    )) &{}
-  )
+            {#it-acc;\object-code{#it;}})
+    )) &{})
 in
 
 document (|
@@ -29,9 +22,13 @@ document (|
   author = {gfn};
 |) '<
   +p{
-    \pp-code@(~`let @Var@ = @Expr1@ in @Expr2@`);
+    \pp-code@(~`
+      let @Var@ = @Expr1@ in @Expr2@
+    `);
   }
   +p{
-    \pp-code@(~`let-inline-macro \@MacroIdent@@@(@MacroParams@) = @Expr1@ in @Expr2@`);
+    \pp-code@(~`
+      let-inline-macro \@Macro@@@(@Params@) = @Expr1@ in @Expr2@
+    `);
   }
 >

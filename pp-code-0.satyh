@@ -1,3 +1,4 @@
+% pp-code-0
 @stage: 0
 @import: external/satysfi-lib/parser
 
@@ -8,41 +9,39 @@ type meta-code-element =
 module MetaCode = struct
 
   let atmark = Char.make `@`
-
   let is-not-atmark ch = not (Char.equal ch atmark)
 
-  let non-atmark-string-parser : string string parser =
+  let non-atmark-string-parser =
     open Parser in
-    many1 (satisfy is-not-atmark) >>= (fun chars -> return (String.of-list chars))
+    many1 (satisfy is-not-atmark) >>= (fun chars ->
+      return (String.of-list chars)
+    )
 
-  let meta-parser : meta-code-element string parser =
+  let meta-parser =
     open Parser in
     let p1 =
-      between
-        (debug `open` (char atmark))
-        (debug `close` (char atmark))
+      between (char atmark) (char atmark)
         non-atmark-string-parser >>= (fun s -> return (MetaCode(s)))
     in
     let p2 = string `@@` >> (return (ObjectCode(`@`))) in
-    debug `meta-parser` (p1 <|> p2)
+    p1 <|> p2
 
-  let object-parser : meta-code-element string parser =
+  let object-parser =
     open Parser in
-    debug `object-parser` (
-      non-atmark-string-parser >>= (fun s -> return (ObjectCode(s)))
-    )
+    non-atmark-string-parser >>= (fun s -> return (ObjectCode(s)))
 
-  let main-parser : (meta-code-element list) string parser =
+  let main-parser =
     open Parser in
-    debug `main-parser` (
-      many (meta-parser <|> object-parser)
-    )
+    many (meta-parser <|> object-parser)
 
+  let parse s =
+    match main-parser |> Parser.run s with
+    | None ->
+        error `MetaCode: parse error (1)`
 
-  let parse : string -> meta-code-element list
-    | s =
-      match main-parser |> Parser.run s with
-      | None             -> error `MetaCode: parse error`
-      | Some((elems, _)) -> elems
-
+    | Some((elems, rest)) ->
+        if String.is-empty rest then
+          elems
+        else
+          error `MetaCode: parse error (2)`
 end
