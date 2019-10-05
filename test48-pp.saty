@@ -1,0 +1,30 @@
+@require: stdjareport
+@import: external/satysfi-lib/string
+@import: test48-pp-small
+
+let-inline-macro \pp@(~s) =
+  ~(
+    match small-parser |> Parser.run s with
+    | None ->
+        error `parse error (1)`
+
+    | Some((sp1, sp2), rest) ->
+        if String.is-empty rest then
+          &(
+            let it1 = embed-string (~(lift-string sp1)) in
+            let it2 = embed-string (~(lift-string sp2)) in
+            {#it1;/#it2;}
+          )
+        else
+          error `parse error (2)`
+  )
+in
+
+document (|
+  title  = {Preprocess for Displaying Code};
+  author = {gfn};
+|) '<
+  +p{
+    \pp@(~`a:b`);
+  }
+>

@@ -1,0 +1,3 @@
+[submodule "external/satysfi-lib"]
+	path = external/satysfi-lib
+	url = https://github.com/gfngfn/satysfi-lib

@@ -1,0 +1,12 @@
+@stage: 0
+@import: external/satysfi-lib/parser
+
+let small-parser =
+  open Parser in
+  any-char >>= (fun ch1 ->
+    string `:` >>= (fun _ ->
+      any-char >>= (fun ch2 ->
+        return (Char.to-string ch1, Char.to-string ch2)
+      )
+    )
+  )

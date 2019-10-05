@@ -1,13 +1,37 @@
 @stage: 0
+@import: external/satysfi-lib/parser
+
+type meta-code-element =
+  | ObjectCode of string
+  | MetaCode   of string
+
+module MetaCode = struct
+
+  let atmark = Char.make `@`
+
+  let is-not-atmark ch = not (Char.equal ch atmark)
+
+  let non-atmark-string-parser : string string parser =
+    open Parser in
+    many (satisfy is-not-atmark) >>= (fun chars -> return (String.of-list chars))
+
+  let meta-parser : meta-code-element string parser =
+    open Parser in
+    between (char atmark) (char atmark) non-atmark-string-parser >>= (fun s -> return (MetaCode(s)))
+
+  let object-parser : meta-code-element string parser =
+    open Parser in
+    non-atmark-string-parser >>= (fun s -> return (ObjectCode(s)))
+
+  let main-parser : (meta-code-element list) string parser =
+    open Parser in
+    many (meta-parser <|> object-parser)
 
 
-module MetaCode0 = struct
-
-  type element =
-    | Ordinary of string
-    | Meta     of string
-
-
-  let
+  let parse : string -> meta-code-element list
+    | s =
+      match main-parser |> Parser.run s with
+      | None             -> error `MetaCode: parse error`
+      | Some((elems, _)) -> elems
 
 end

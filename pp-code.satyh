@@ -1,5 +1,32 @@
-@import: lib/parser
+@import: pp-code-0
+
+let-inline ctx \meta-code it =
+  let ctx = ctx |> set-font Latin (`lmmono`, 1., 0.) in
+  read-inline ctx it
+
+
+let-inline ctx \object-code it =
+  let ctx = ctx |> set-font Latin (`Junicode-it`, 1., 0.) in
+  read-inline ctx it
+
 
 let-inline-macro \pp-code@(~s) =
   ~(
+    MetaCode.parse(s) |> List.fold-left (fun itcode elem -> (
+      match elem with
+      | MetaCode(s) ->
+          &(
+            let it-acc = ~itcode in
+            let it = embed-string ~(lift-string s) in
+            {#it-acc;\meta-code{#it;}}
+          )
+
+      | ObjectCode(s) ->
+          &(
+            let it-acc = ~itcode in
+            let it = embed-string ~(lift-string s) in
+            {#it-acc;\object-code{#it;}}
+          )
+
+    )) &{}
   )
