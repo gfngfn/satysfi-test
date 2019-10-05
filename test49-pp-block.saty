@@ -1,0 +1,31 @@
+@require: stdjareport
+@import: test49-pp
+
+let-block-macro +ps@(~s) =
+  ~(let sps = divide-into-paragraphs s in
+    sps |> List.fold-left (fun btcode sp -> (
+      &(let bt-acc = ~btcode in
+        let it = embed-string ~(lift-string sp) in
+        '< #bt-acc;+p{#it;} >)
+    )) (&('<>)))
+in
+
+document (|
+  title  = {Block Macros};
+  author = {gfn};
+|) '<
+  +ps@(~`
+    The quick brown fox jumps over the lazy dog.
+    The quick brown fox jumps over the lazy dog.
+    The quick brown fox jumps over the lazy dog.
+    The quick brown fox jumps over the lazy dog.
+    The quick brown fox jumps over the lazy dog.
+    The quick brown fox jumps over the lazy dog.
+
+    My quiz above the kiwi juice needs priceless fixing.
+    My quiz above the kiwi juice needs priceless fixing.
+    My quiz above the kiwi juice needs priceless fixing.
+    My quiz above the kiwi juice needs priceless fixing.
+    My quiz above the kiwi juice needs priceless fixing.
+  `);
+>

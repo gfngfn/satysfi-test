@@ -1,0 +1,68 @@
+@stage: 0
+@import: external/satysfi-lib/parser
+
+type element =
+  | Separator
+  | Text of string
+
+let charCR = (Char.of-codepoint 0x0D)
+let charLF = (Char.of-codepoint 0x0A)
+let space = (Char.of-codepoint 0x20)
+
+let not-a-break ch =
+  not (Char.equal ch charLF)
+
+let paragraph-parser =
+  open Parser in
+  debug `paragraph` (
+    many1 (satisfy not-a-break) >>= (fun chs -> return (Text(String.of-list chs)))
+  )
+
+let separator-parser =
+  open Parser in
+  debug `separator` (
+    char charLF >> many (char space) >> char charLF >> return Separator
+  )
+
+let break-parser =
+  open Parser in
+  debug `break` (
+    char charLF >> return (Text(#` `#))
+  )
+
+let element-parser =
+  open Parser in
+  debug `element` (
+    paragraph-parser <|> separator-parser <|> break-parser
+  )
+
+let main-parser =
+  open Parser in
+  many element-parser >>= (fun elems -> (
+    let (paracc, textaccopt) =
+      elems |> List.fold-left (fun (paracc, textaccopt) elem -> (
+        match (elem, textaccopt) with
+        | (Separator, Some(textacc)) -> (textacc :: paracc, None)
+        | (Separator, None         ) -> (paracc, None)
+        | (Text(s)  , Some(textacc)) -> (paracc, Some(textacc ^ s))
+        | (Text(s)  , None         ) -> (paracc, Some(s))
+      )) ([], None)
+    in
+    let paracc =
+      match textaccopt with
+      | None          -> paracc
+      | Some(textacc) -> textacc :: paracc
+    in
+    return (paracc |> List.reverse)
+  ))
+
+let divide-into-paragraphs s =
+  match main-parser |> Parser.run s with
+  | None ->
+      error `parse error (1)`
+
+  | Some((ps, rest)) ->
+      if String.is-empty rest then
+        ps
+      else
+        error `parse error (2)`
