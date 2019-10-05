@@ -1,8 +1,31 @@
 @require: stdjareport
+@require: deco
 @import: external/satysfi-lib/string
 @import: test48-pp-small
 
-let-inline-macro \pp@(~s) =
+
+let paddings-surround = (2pt, 2pt, 2pt, 2pt)
+let color-surround = Color.gray 0.2
+
+let deco-surround (x, y) w h d =
+  let w-extra = 6pt in
+  let path =
+    Gr.polygon (x, y -' d) [
+      (x, y +' h);
+      (x +' w, y +' h);
+      (x +' w +' w-extra, y +' (h -' d) *' 0.5);
+      (x +' w, y -' d);
+    ]
+  in
+  [ fill color-surround path ]
+
+
+let-inline ctx \header-name it =
+  let ctx = ctx |> set-text-color Color.white in
+  inline-frame-outer paddings-surround deco-surround (read-inline ctx it)
+
+
+let-inline-macro \header@(~s) =
   ~(
     match small-parser |> Parser.run s with
     | None ->
@@ -13,7 +36,7 @@ let-inline-macro \pp@(~s) =
           &(
             let it1 = embed-string (~(lift-string sp1)) in
             let it2 = embed-string (~(lift-string sp2)) in
-            {#it1;/#it2;}
+            {\header-name{#it1;} #it2;}
           )
         else
           error `parse error (2)`
@@ -21,10 +44,10 @@ let-inline-macro \pp@(~s) =
 in
 
 document (|
-  title  = {Preprocess for Displaying Code};
+  title  = {Preprocess};
   author = {gfn};
 |) '<
   +p{
-    \pp@(~`a:b`);
+    \header@(~`Content-Type: application/json`);
   }
 >

@@ -1,12 +1,17 @@
 @stage: 0
 @import: external/satysfi-lib/parser
 
+let colon = Char.make `:`
+
+let is-not-colon ch =
+  not (Char.equal ch colon)
+
 let small-parser =
   open Parser in
-  any-char >>= (fun ch1 ->
+  many (satisfy is-not-colon) >>= (fun chars1 ->
     string `:` >>= (fun _ ->
-      any-char >>= (fun ch2 ->
-        return (Char.to-string ch1, Char.to-string ch2)
+      many any-char >>= (fun chars2 ->
+        return (String.of-list chars1, String.of-list chars2)
       )
     )
   )
