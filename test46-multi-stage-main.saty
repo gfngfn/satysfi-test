@@ -1,0 +1,24 @@
+@stage: 1
+@require: stdjareport
+@import: test46-pre
+
+let-inline \judge n =
+  ~(gen-cond [
+      (&(n < 0), &{negative});
+      (&(n > 0), &{positive});
+    ] &{zero}
+  )
+
+let-inline \test-gen-power =
+  let f = ~(gen-power 10) in embed-string (arabic (f 2))
+in
+
+document (|
+  title = {Test for Staged Computations};
+  author = {gfn};
+|) '<
+  +p{ 10: \judge(10); }
+  +p{ -3: \judge(-3); }
+  +p{ 0: \judge(0); }
+  +p{ \test-gen-power; }
+>
