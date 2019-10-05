@@ -1,0 +1,10 @@
+@require: stdjareport
+
+document (|
+  title  = {Preprocess for Displaying Code};
+  author = {gfn};
+|) '<
+  +p{
+    \pp-code@(~`let @{x} = @{e_1} in @{e_2}`);
+  }
+>

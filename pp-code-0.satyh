@@ -1,0 +1,13 @@
+@stage: 0
+
+
+module MetaCode0 = struct
+
+  type element =
+    | Ordinary of string
+    | Meta     of string
+
+
+  let
+
+end
