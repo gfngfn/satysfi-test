@@ -1,40 +1,27 @@
 @stage: 0
 @import: external/satysfi-lib/parser
 
-type element =
-  | Separator
-  | Text of string
+type element = Separator | Text of string
 
-let charCR = (Char.of-codepoint 0x0D)
 let charLF = (Char.of-codepoint 0x0A)
 let space = (Char.of-codepoint 0x20)
-
-let not-a-break ch =
-  not (Char.equal ch charLF)
+let not-a-break ch = not (Char.equal ch charLF)
 
 let paragraph-parser =
   open Parser in
-  debug `paragraph` (
-    many1 (satisfy not-a-break) >>= (fun chs -> return (Text(String.of-list chs)))
-  )
+  many1 (satisfy not-a-break) >>= (fun chs -> return (Text(String.of-list chs)))
 
 let separator-parser =
   open Parser in
-  debug `separator` (
-    char charLF >> many (char space) >> char charLF >> return Separator
-  )
+  char charLF >> many (char space) >> char charLF >> return Separator
 
 let break-parser =
   open Parser in
-  debug `break` (
-    char charLF >> return (Text(#` `#))
-  )
+  char charLF >> return (Text(#` `#))
 
 let element-parser =
   open Parser in
-  debug `element` (
-    paragraph-parser <|> separator-parser <|> break-parser
-  )
+  paragraph-parser <|> separator-parser <|> break-parser
 
 let main-parser =
   open Parser in
