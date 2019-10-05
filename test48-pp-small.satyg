@@ -1,5 +1,6 @@
 % test48-pp-small
 @stage: 0
+@import: external/satysfi-lib/string
 @import: external/satysfi-lib/parser
 
 let colon = Char.make `:`
@@ -10,9 +11,7 @@ let is-not-colon ch =
 let small-parser =
   open Parser in
   many (satisfy is-not-colon) >>= (fun chars1 ->
-    string `:` >>= (fun _ ->
-      many any-char >>= (fun chars2 ->
-        return (String.of-list chars1, String.of-list chars2)
-      )
+    string `:` >> many any-char >>= (fun chars2 ->
+      return (String.of-list chars1, String.of-list chars2)
     )
   )
