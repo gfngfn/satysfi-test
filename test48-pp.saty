@@ -4,25 +4,36 @@
 @import: test48-pp-small
 
 
-let paddings-surround = (2pt, 2pt, 2pt, 2pt)
+let w-extra-surround = 6pt
+let paddings-surround = (2pt, 2pt +' w-extra-surround, 2pt, 2pt)
 let color-surround = Color.gray 0.2
 
 let deco-surround (x, y) w h d =
-  let w-extra = 6pt in
   let path =
     Gr.polygon (x, y -' d) [
       (x, y +' h);
-      (x +' w, y +' h);
-      (x +' w +' w-extra, y +' (h -' d) *' 0.5);
-      (x +' w, y -' d);
+      (x +' w -' w-extra-surround, y +' h);
+      (x +' w, y +' (h -' d) *' 0.5);
+      (x +' w -' w-extra-surround, y -' d);
     ]
   in
   [ fill color-surround path ]
 
 
+let set-mono-font =
+  set-font Latin (`Menlo`, 1., 0.)
+
+
 let-inline ctx \header-name it =
-  let ctx = ctx |> set-text-color Color.white in
+  let ctx =
+    ctx |> set-text-color Color.white
+        |> set-mono-font
+  in
   inline-frame-outer paddings-surround deco-surround (read-inline ctx it)
+
+
+let-inline ctx \header-value it =
+  read-inline (ctx |> set-mono-font) it
 
 
 let-inline-macro \header@(~s) =
@@ -31,15 +42,11 @@ let-inline-macro \header@(~s) =
     | None ->
         error `parse error (1)`
 
-    | Some((sp1, sp2), rest) ->
-        if String.is-empty rest then
-          &(
-            let it1 = embed-string (~(lift-string sp1)) in
-            let it2 = embed-string (~(lift-string sp2)) in
-            {\header-name{#it1;} #it2;}
-          )
-        else
-          error `parse error (2)`
+    | Some((sp1, sp2), _) ->
+        &(let it1 = embed-string (~(lift-string sp1)) in
+          let it2 = embed-string (~(lift-string sp2)) in
+          {\header-name{#it1;} \header-value{#it2;}}
+        )
   )
 in
 
