@@ -31,4 +31,7 @@ document (|
   +p{
     \pp-code@(~`let @Var@ = @Expr1@ in @Expr2@`);
   }
+  +p{
+    \pp-code@(~`let-inline-macro \@MacroIdent@@@(@MacroParams@) = @Expr1@ in @Expr2@`);
+  }
 >

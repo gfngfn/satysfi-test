@@ -17,12 +17,14 @@ module MetaCode = struct
 
   let meta-parser : meta-code-element string parser =
     open Parser in
-    debug `meta-parser` (
+    let p1 =
       between
         (debug `open` (char atmark))
         (debug `close` (char atmark))
         non-atmark-string-parser >>= (fun s -> return (MetaCode(s)))
-    )
+    in
+    let p2 = string `@@` >> (return (ObjectCode(`@`))) in
+    debug `meta-parser` (p1 <|> p2)
 
   let object-parser : meta-code-element string parser =
     open Parser in
