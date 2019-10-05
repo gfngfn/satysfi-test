@@ -1,44 +1,9 @@
 @require: stdjareport
-@require: deco
-@import: external/satysfi-lib/string
 @import: test48-pp-small
-
-
-let w-extra-surround = 6pt
-let paddings-surround = (2pt, 2pt +' w-extra-surround, 2pt, 2pt)
-let color-surround = Color.gray 0.2
-
-let deco-surround (x, y) w h d =
-  let path =
-    Gr.polygon (x, y -' d) [
-      (x, y +' h);
-      (x +' w -' w-extra-surround, y +' h);
-      (x +' w, y +' (h -' d) *' 0.5);
-      (x +' w -' w-extra-surround, y -' d);
-    ]
-  in
-  [ fill color-surround path ]
-
-
-let set-mono-font =
-  set-font Latin (`Menlo`, 1., 0.)
-
-
-let-inline ctx \header-name it =
-  let ctx =
-    ctx |> set-text-color Color.white
-        |> set-mono-font
-  in
-  inline-frame-outer paddings-surround deco-surround (read-inline ctx it)
-
-
-let-inline ctx \header-value it =
-  read-inline (ctx |> set-mono-font) it
-
+@import: test48-cmds
 
 let-inline-macro \header@(~s) =
-  ~(
-    match small-parser |> Parser.run s with
+  ~(match small-parser |> Parser.run s with
     | None ->
         error `parse error (1)`
 
@@ -54,7 +19,5 @@ document (|
   title  = {Preprocess};
   author = {gfn};
 |) '<
-  +p{
-    \header@(~`Content-Type: application/json`);
-  }
+  +p{ \header@(~`Content-Type: application/json`); }
 >
