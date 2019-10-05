@@ -1,12 +1,12 @@
 @require: stdjareport
 @import: pp-code-0
 
-let-inline ctx \meta-code it =
+let-inline ctx \object-code it =
   let ctx = ctx |> set-font Latin (`lmmono`, 1., 0.) in
   read-inline ctx it
 
 
-let-inline ctx \object-code it =
+let-inline ctx \meta-code it =
   let ctx = ctx |> set-font Latin (`Junicode-it`, 1., 0.) in
   read-inline ctx it
 
@@ -38,7 +38,6 @@ document (|
   author = {gfn};
 |) '<
   +p{
-%    \pp-code@(~`let @x@ = @e1@ in @e2@`);
-    \pp-code@(~`a`);
+    \pp-code@(~`let @Var@ = @Expr1@ in @Expr2@`);
   }
 >

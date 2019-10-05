@@ -7,25 +7,59 @@ type meta-code-element =
 
 module MetaCode = struct
 
+  let (display-with-indentation, deepen-indentation, shallow-indentation) =
+    let-mutable indentation <- 0 in
+    ( (fun str ->
+        display-message (String.pow !indentation #`  `# ^ str))
+    , (fun () ->
+        (indentation <- !indentation + 1))
+    , (fun () ->
+        (indentation <- !indentation - 1))
+    )
+
+  let debug =
+    fun msg p s -> (
+      let () = display-with-indentation (msg ^ `: "` ^ s ^ `" {`) in
+      let () = deepen-indentation () in
+      let res = p s in
+      let () = shallow-indentation () in
+      let s2 =
+        match res with
+        | None          -> `} -> fail`
+        | Some(_, rest) -> `} -> success "` ^ rest ^ `"`
+      in
+      let () = display-with-indentation s2 in
+      res
+    )
+
   let atmark = Char.make `@`
 
   let is-not-atmark ch = not (Char.equal ch atmark)
 
   let non-atmark-string-parser : string string parser =
     open Parser in
-    many (satisfy is-not-atmark) >>= (fun chars -> return (String.of-list chars))
+    many1 (satisfy is-not-atmark) >>= (fun chars -> return (String.of-list chars))
 
   let meta-parser : meta-code-element string parser =
+  debug `meta-parser` (
     open Parser in
-    between (char atmark) (char atmark) non-atmark-string-parser >>= (fun s -> return (MetaCode(s)))
+    between
+      (debug `open` (char atmark))
+      (debug `close` (char atmark))
+      non-atmark-string-parser >>= (fun s -> return (MetaCode(s)))
+  )
 
   let object-parser : meta-code-element string parser =
+  debug `object-parser` (
     open Parser in
     non-atmark-string-parser >>= (fun s -> return (ObjectCode(s)))
+  )
 
   let main-parser : (meta-code-element list) string parser =
+  debug `main-parser` (
     open Parser in
     many (meta-parser <|> object-parser)
+  )
 
 
   let parse : string -> meta-code-element list
