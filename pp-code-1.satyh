@@ -1,0 +1,9 @@
+
+let-inline ctx \object-code it =
+  let ctx = ctx |> set-font Latin (`lmmono`, 1., 0.) in
+  read-inline ctx it
+
+
+let-inline ctx \meta-code it =
+  let ctx = ctx |> set-font Latin (`Junicode-it`, 1., 0.) in
+  read-inline ctx it
