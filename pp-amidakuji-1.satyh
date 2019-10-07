@@ -13,7 +13,10 @@ let make-x (xorig, yorig) i =
   xorig +' width-unit *' (float i)
 
 let make-y (xorig, yorig) j =
-  yorig -' height +' height-unit *' (float j)
+  yorig +' height -' height-unit *' (float (j + 1))
+
+let draw-frame (x, y) w h =
+  stroke 1pt Color.red (Gr.rectangle (x, y) (x +' w, y +' h))
 
 let-inline ctx \embed ib =
   ib
@@ -32,24 +35,26 @@ let-inline-macro \amidakuji@(~s) =
                   let x = make-x origin i in
                   let y = make-y origin j in
                   let ym = y +' height-unit *' 0.5 in
+                  let () = display-message `HorizontalLine` in
                   [
-                    stroke thickness color (Gr.line (x, ym) (x +' width-unit, ym));
+                    stroke thickness Color.orange (Gr.line (x, ym) (x +' width-unit, ym));
                   ]
 
               | CrossingLines(i, j)  ->
                   let xL = make-x origin i in
                   let y = make-y origin j in
                   let xR = xL +' width-unit in
-                  let yH = y +' height-unit *' 0.75 in
-                  let yL = y +' height-unit *' 0.25 in
+                  let yH = y +' height-unit *' 0.85 in
+                  let yL = y +' height-unit *' 0.15 in
+                  let () = display-message `CrossingLines` in
                   [
-                    stroke thickness color (Gr.line (xL, yH) (xR, yL));
-                    stroke thickness color (Gr.line (xL, yL) (xR, yH));
+                    stroke thickness Color.blue (Gr.line (xL, yH) (xR, yL));
+                    stroke thickness Color.yellow (Gr.line (xL, yL) (xR, yH));
                   ]
 
             )) |> List.concat
           in
-          grs
+          (draw-frame origin width height) :: grs
         ))
       in
       {\embed(ib);}

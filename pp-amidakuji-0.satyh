@@ -9,7 +9,7 @@ type amida-drawn =
 let lift-amida-drawn drawn =
   match drawn with
   | HorizontalLine(i, j) -> &(HorizontalLine(~(lift-int i), ~(lift-int j)))
-  | CrossingLines(i, j)  -> &(HorizontalLine(~(lift-int i), ~(lift-int j)))
+  | CrossingLines(i, j)  -> &(CrossingLines(~(lift-int i), ~(lift-int j)))
 
 
 let lift-list liftf xs =
@@ -86,8 +86,8 @@ end = struct
         if not (String.is-empty rest) then
           error (`syntax error (2): "` ^ rest ^ `"`)
         else
-          lines |> List.fold-lefti (fun i acc line ->
-            line |> List.fold-lefti (fun j acc elem -> (
+          lines |> List.fold-lefti (fun j acc line ->
+            line |> List.fold-lefti (fun i acc elem -> (
               match elem with
               | Horizon  -> (HorizontalLine(i, j)) :: acc
               | Crossing -> (CrossingLines(i, j)) :: acc
