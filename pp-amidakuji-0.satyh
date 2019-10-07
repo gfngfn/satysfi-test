@@ -1,0 +1,97 @@
+@stage: 0
+@import: external/satysfi-lib/parser
+
+type amida-drawn =
+  | HorizontalLine of int * int
+  | CrossingLines  of int * int
+
+
+let lift-amida-drawn drawn =
+  match drawn with
+  | HorizontalLine(i, j) -> &(HorizontalLine(~(lift-int i), ~(lift-int j)))
+  | CrossingLines(i, j)  -> &(HorizontalLine(~(lift-int i), ~(lift-int j)))
+
+
+let lift-list liftf xs =
+  let codeacc =
+    xs |> List.fold-left (fun codeacc x ->
+      &(~(liftf x) :: ~codeacc)
+    ) &[]
+  in
+  &(List.reverse ~(codeacc))
+
+
+let display-drawn drawn =
+  let f s i j =
+    display-message (s ^ `(` ^ (arabic i) ^ `, `# ^ (arabic j) ^ `)`)
+  in
+  match drawn with
+  | HorizontalLine(i, j) -> f `H` i j
+  | CrossingLines(i, j)  -> f `C` i j
+
+
+module Amidakuji : sig
+  val parse : string -> amida-drawn list
+end = struct
+
+  type amida-element =
+    | Horizon
+    | Empty
+    | Crossing
+
+  let charLF = Char.of-codepoint 0x0A
+  let charCR = Char.of-codepoint 0x0D
+
+  let break-parser =
+    open Parser in
+        (char charCR >> char charLF >> return ())
+    <|> (char charLF >> return ())
+
+  let space-parser =
+    Parser.string #` `#
+
+  let element-parser =
+    open Parser in
+    debug `element` (
+          (string `-|` >> return Horizon)
+      <|> (string #` |` >> return Empty)
+      <|> (string `X|` >> return Crossing)
+    )
+
+  let line-parser =
+    open Parser in
+    debug `line` (
+      between (string `|`) (break-parser >> many space-parser)
+        (many element-parser) >>= (fun line -> return [line])
+    )
+
+  let blank-parser =
+    open Parser in
+    debug `blank` (
+      (many space-parser) >> break-parser >> many space-parser >> return []
+    )
+
+  let main-parser =
+    open Parser in
+    many1 (line-parser <|> blank-parser) >>= (fun liness -> (
+      return (List.concat liness)
+    ))
+
+  let parse s =
+    match main-parser |> Parser.run (s ^ Char.to-string charLF) with
+    | None ->
+        error `syntax error (1)`
+
+    | Some((lines, rest)) ->
+        if not (String.is-empty rest) then
+          error (`syntax error (2): "` ^ rest ^ `"`)
+        else
+          lines |> List.fold-lefti (fun i acc line ->
+            line |> List.fold-lefti (fun j acc elem -> (
+              match elem with
+              | Horizon  -> (HorizontalLine(i, j)) :: acc
+              | Crossing -> (CrossingLines(i, j)) :: acc
+              | Empty    -> acc
+            )) acc
+          ) [] |> List.reverse
+end

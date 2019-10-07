@@ -1,0 +1,16 @@
+@require: stdjareport
+@import: pp-amidakuji-1
+
+document (|
+  title  = {あみだくじ};
+  author = {gfn};
+|) '<
+  +p{
+    A
+    \amidakuji@(~`
+      |X|-|
+      | |-|
+    `);
+    B
+  }
+>
