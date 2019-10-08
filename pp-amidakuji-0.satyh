@@ -31,7 +31,7 @@ let display-drawn drawn =
 
 
 module Amidakuji : sig
-  val parse : string -> amida-drawn list
+  val parse : string -> amida-drawn list * int * int
 end = struct
 
   type amida-element =
@@ -77,6 +77,9 @@ end = struct
       return (List.concat liness)
     ))
 
+  let int-max m n =
+    if m >= n then m else n
+
   let parse s =
     match main-parser |> Parser.run (s ^ Char.to-string charLF) with
     | None ->
@@ -86,12 +89,18 @@ end = struct
         if not (String.is-empty rest) then
           error (`syntax error (2): "` ^ rest ^ `"`)
         else
-          lines |> List.fold-lefti (fun j acc line ->
-            line |> List.fold-lefti (fun i acc elem -> (
-              match elem with
-              | Horizon  -> (HorizontalLine(i, j)) :: acc
-              | Crossing -> (CrossingLines(i, j)) :: acc
-              | Empty    -> acc
-            )) acc
-          ) [] |> List.reverse
+          let (accfinal, inum) =
+            lines |> List.fold-lefti (fun j (acc, inum) line -> (
+              let accnew =
+                line |> List.fold-lefti (fun i acc elem -> (
+                  match elem with
+                  | Horizon  -> (HorizontalLine(i, j)) :: acc
+                  | Crossing -> (CrossingLines(i, j)) :: acc
+                  | Empty    -> acc
+                )) acc
+              in
+              (accnew, int-max inum (List.length line))
+            )) ([], 0)
+          in
+          (List.reverse accfinal, inum, List.length lines)
 end

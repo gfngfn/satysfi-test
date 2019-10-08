@@ -2,8 +2,6 @@
 @require: color
 @import: pp-amidakuji-0
 
-let width = 10cm % temporary
-let height = 10cm % temporary
 let width-unit = 1cm
 let height-unit = 0.75cm
 let color = Color.black
@@ -12,49 +10,68 @@ let thickness = 2pt
 let make-x (xorig, yorig) i =
   xorig +' width-unit *' (float i)
 
-let make-y (xorig, yorig) j =
+let make-y height (xorig, yorig) j =
   yorig +' height -' height-unit *' (float (j + 1))
 
 let draw-frame (x, y) w h =
   stroke 1pt Color.red (Gr.rectangle (x, y) (x +' w, y +' h))
 
+let int-range =
+  let-rec aux acc m n =
+    if m > n then List.reverse acc else
+      aux (m :: acc) (m + 1) n
+  in
+  aux []
+
 let-inline ctx \embed ib =
   ib
 
 let-inline-macro \amidakuji@(~s) =
-  ~(let drawns-0 = Amidakuji.parse s in
+  ~(let (drawns-0, inum-0, jnum-0) = Amidakuji.parse s in
     let () = display-message `DEBUG` in
     let () = drawns-0 |> List.iter display-drawn in  % for debug
-    &(let drawns = ~(lift-list lift-amida-drawn drawns-0) in
+    &(let inum = ~(lift-int inum-0) in
+      let jnum = ~(lift-int jnum-0) in
+      let drawns = ~(lift-list lift-amida-drawn drawns-0) in
+      let width = width-unit *' (float inum) in
+      let height = height-unit *' (float jnum) in
       let ib =
         inline-graphics width height 0pt (fun origin -> (
-          let grs =
+          let grs-main =
             drawns |> List.map (fun drawn -> (
               match drawn with
               | HorizontalLine(i, j) ->
                   let x = make-x origin i in
-                  let y = make-y origin j in
+                  let y = make-y height origin j in
                   let ym = y +' height-unit *' 0.5 in
                   let () = display-message `HorizontalLine` in
                   [
-                    stroke thickness Color.orange (Gr.line (x, ym) (x +' width-unit, ym));
+                    stroke thickness color (Gr.line (x, ym) (x +' width-unit, ym));
                   ]
 
               | CrossingLines(i, j)  ->
                   let xL = make-x origin i in
-                  let y = make-y origin j in
+                  let y = make-y height origin j in
                   let xR = xL +' width-unit in
                   let yH = y +' height-unit *' 0.85 in
                   let yL = y +' height-unit *' 0.15 in
                   let () = display-message `CrossingLines` in
                   [
-                    stroke thickness Color.blue (Gr.line (xL, yH) (xR, yL));
-                    stroke thickness Color.yellow (Gr.line (xL, yL) (xR, yH));
+                    stroke thickness color (Gr.line (xL, yH) (xR, yL));
+                    stroke thickness color (Gr.line (xL, yL) (xR, yH));
                   ]
 
             )) |> List.concat
           in
-          (draw-frame origin width height) :: grs
+          let grs-vert =
+            let yT = make-y height origin (-1) in
+            let yL = make-y height origin (jnum - 1) in
+            (int-range 0 inum) |> List.map (fun i -> (
+              let x = make-x origin i in
+              stroke thickness color (Gr.line (x, yT) (x, yL))
+            ))
+          in
+          (draw-frame origin width height) :: (List.append grs-vert grs-main)
         ))
       in
       {\embed(ib);}
