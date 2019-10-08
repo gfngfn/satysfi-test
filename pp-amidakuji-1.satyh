@@ -11,7 +11,7 @@ let make-x (xorig, yorig) i =
   xorig +' width-unit *' (float i)
 
 let make-y height (xorig, yorig) j =
-  yorig +' height -' height-unit *' (float (j + 1))
+  yorig +' height -' height-unit *' (float j)
 
 let draw-frame (x, y) w h =
   stroke 1pt Color.red (Gr.rectangle (x, y) (x +' w, y +' h))
@@ -43,7 +43,7 @@ let-inline-macro \amidakuji@(~s) =
               | HorizontalLine(i, j) ->
                   let x = make-x origin i in
                   let y = make-y height origin j in
-                  let ym = y +' height-unit *' 0.5 in
+                  let ym = y -' height-unit *' 0.5 in
                   let () = display-message `HorizontalLine` in
                   [
                     stroke thickness color (Gr.line (x, ym) (x +' width-unit, ym));
@@ -53,8 +53,8 @@ let-inline-macro \amidakuji@(~s) =
                   let xL = make-x origin i in
                   let y = make-y height origin j in
                   let xR = xL +' width-unit in
-                  let yH = y +' height-unit *' 0.85 in
-                  let yL = y +' height-unit *' 0.15 in
+                  let yH = y -' height-unit *' 0.15 in
+                  let yL = y -' height-unit *' 0.85 in
                   let () = display-message `CrossingLines` in
                   [
                     stroke thickness color (Gr.line (xL, yH) (xR, yL));
@@ -64,8 +64,8 @@ let-inline-macro \amidakuji@(~s) =
             )) |> List.concat
           in
           let grs-vert =
-            let yT = make-y height origin (-1) in
-            let yL = make-y height origin (jnum - 1) in
+            let yT = make-y height origin 0 in
+            let yL = make-y height origin jnum in
             (int-range 0 inum) |> List.map (fun i -> (
               let x = make-x origin i in
               stroke thickness color (Gr.line (x, yT) (x, yL))
