@@ -4,12 +4,17 @@
 type amida-drawn =
   | HorizontalLine of int * int
   | CrossingLines  of int * int
-
+  | PositiveLine   of int * int
+  | NegativeLine   of int * int
+  | DoubleLine     of int * int
 
 let lift-amida-drawn drawn =
   match drawn with
   | HorizontalLine(i, j) -> &(HorizontalLine(~(lift-int i), ~(lift-int j)))
   | CrossingLines(i, j)  -> &(CrossingLines(~(lift-int i), ~(lift-int j)))
+  | PositiveLine(i, j)   -> &(PositiveLine(~(lift-int i), ~(lift-int j)))
+  | NegativeLine(i, j)   -> &(NegativeLine(~(lift-int i), ~(lift-int j)))
+  | DoubleLine(i, j)     -> &(DoubleLine(~(lift-int i), ~(lift-int j)))
 
 
 let lift-list liftf xs =
@@ -28,6 +33,7 @@ let display-drawn drawn =
   match drawn with
   | HorizontalLine(i, j) -> f `H` i j
   | CrossingLines(i, j)  -> f `C` i j
+  | _                    -> f `O` 0 0
 
 
 module Amidakuji : sig
@@ -38,6 +44,9 @@ end = struct
     | Horizon
     | Empty
     | Crossing
+    | Positive
+    | Negative
+    | Double
 
   let charLF = Char.of-codepoint 0x0A
   let charCR = Char.of-codepoint 0x0D
@@ -56,6 +65,9 @@ end = struct
           (string `-|` >> return Horizon)
       <|> (string #` |` >> return Empty)
       <|> (string `X|` >> return Crossing)
+      <|> (string `/|` >> return Positive)
+      <|> (string `\|` >> return Negative)
+      <|> (string `=|` >> return Double)
     )
 
   let line-parser =
@@ -94,9 +106,12 @@ end = struct
               let accnew =
                 line |> List.fold-lefti (fun i acc elem -> (
                   match elem with
+                  | Empty    -> acc
                   | Horizon  -> (HorizontalLine(i, j)) :: acc
                   | Crossing -> (CrossingLines(i, j)) :: acc
-                  | Empty    -> acc
+                  | Positive -> (PositiveLine(i, j)) :: acc
+                  | Negative -> (NegativeLine(i, j)) :: acc
+                  | Double   -> (DoubleLine(i, j)) :: acc
                 )) acc
               in
               (accnew, int-max inum (List.length line))

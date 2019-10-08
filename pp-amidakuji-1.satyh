@@ -51,14 +51,45 @@ let-inline-macro \amidakuji@(~s) =
 
               | CrossingLines(i, j)  ->
                   let xL = make-x origin i in
-                  let y = make-y height origin j in
                   let xR = xL +' width-unit in
+                  let y = make-y height origin j in
                   let yH = y -' height-unit *' 0.15 in
                   let yL = y -' height-unit *' 0.85 in
                   let () = display-message `CrossingLines` in
                   [
                     stroke thickness color (Gr.line (xL, yH) (xR, yL));
                     stroke thickness color (Gr.line (xL, yL) (xR, yH));
+                  ]
+
+              | PositiveLine(i, j) ->
+                  let xL = make-x origin i in
+                  let xR = xL +' width-unit in
+                  let y = make-y height origin j in
+                  let yH = y -' height-unit *' 0.1 in
+                  let yL = y -' height-unit *' 0.9 in
+                  [
+                    stroke thickness color (Gr.line (xL, yL) (xR, yH));
+                  ]
+
+              | NegativeLine(i, j) ->
+                  let xL = make-x origin i in
+                  let xR = xL +' width-unit in
+                  let y = make-y height origin j in
+                  let yH = y -' height-unit *' 0.1 in
+                  let yL = y -' height-unit *' 0.9 in
+                  [
+                    stroke thickness color (Gr.line (xL, yH) (xR, yL));
+                  ]
+
+              | DoubleLine(i, j) ->
+                  let xL = make-x origin i in
+                  let xR = xL +' width-unit in
+                  let y = make-y height origin j in
+                  let yH = y -' height-unit *' 0.35 in
+                  let yL = y -' height-unit *' 0.65 in
+                  [
+                    stroke thickness color (Gr.line (xL, yH) (xR, yH));
+                    stroke thickness color (Gr.line (xL, yL) (xR, yL));
                   ]
 
             )) |> List.concat
@@ -71,7 +102,7 @@ let-inline-macro \amidakuji@(~s) =
               stroke thickness color (Gr.line (x, yT) (x, yL))
             ))
           in
-          (draw-frame origin width height) :: (List.append grs-vert grs-main)
+          List.append grs-vert grs-main
         ))
       in
       {\embed(ib);}
