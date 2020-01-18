@@ -1,0 +1,20 @@
+@require: stdjareport
+@import: test51-pp-0
+
+let-inline \show-int n = embed-string (arabic n)
+in
+document (|
+  title  = {a};
+  author = {b};
+|) '<
+  +p{
+    \show-int(~(gen (Let(Value(&1), fun x ->
+                    (Let(Value(&2), fun y ->
+                    x))))));
+  }
+  +p{
+    \show-int(~(gen-let (gen-value &1) (fun x ->
+               (gen-let (gen-value &2) (fun y ->
+               y)))));
+  }
+>

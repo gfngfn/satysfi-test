@@ -1,0 +1,16 @@
+@stage: 0
+
+type 'a ast =
+  | Value of 'a
+  | Let   of 'a ast * ('a ast -> 'a ast)
+
+let gen-value v =
+  &(let x = ~v in x)
+
+let gen-let expr body =
+  &(let e = ~expr in ~(body &e))
+
+let-rec gen ast =
+  match ast with
+  | Value(v)        -> gen-value v
+  | Let(expr, body) -> gen-let (gen expr) (fun x -> gen (body (Value(x))))
