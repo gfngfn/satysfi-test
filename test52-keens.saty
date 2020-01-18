@@ -1,0 +1,14 @@
+@require: stdjareport
+@import: test52-keens-0
+
+let-inline \show-int n = embed-string (arabic n)
+in
+
+document (|
+  title = {サンプル文書};
+  author = {組 版太郎};
+|) '<
+ +p {\show-int(~(gen (Let (Value (&1), fun x ->
+                     (Let (Value (&2), fun y ->
+                     x))))));}
+>
