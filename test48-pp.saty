@@ -2,7 +2,7 @@
 @import: test48-pp-small
 @import: test48-cmds
 
-let-inline-macro \header@(~s) =
+let-inline \header@ ~s =
   ~(match small-parser |> Parser.run s with
     | None ->
         error `parse error (1)`
@@ -19,5 +19,5 @@ document (|
   title  = {Preprocess};
   author = {gfn};
 |) '<
-  +p{ \header@(~`Content-Type: application/json`); }
+  +p{ \header@~(`Content-Type: application/json`); }
 >

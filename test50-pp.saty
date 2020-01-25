@@ -6,8 +6,8 @@ document (|
   author = {gfn};
 |) '<
   +p{
-    A
-    \amidakuji@(~`
+    %A
+    \amidakuji@~(`
       | | | | | |
       |X|-|=|/| |
       | |-|\|-|X|
@@ -16,6 +16,6 @@ document (|
       |X|=|-|\| |
       | | | | | |
     `);
-    B
+    %B
   }
 >

@@ -1,7 +1,7 @@
 @require: stdjareport
 @import: test49-pp
 
-let-block-macro +ps@(~s) =
+let-block +ps@ ~s =
   ~(let sps = divide-into-paragraphs s in
     sps |> List.fold-left (fun btcode sp -> (
       &(let bt-acc = ~btcode in
@@ -14,7 +14,7 @@ document (|
   title  = {Block Macros};
   author = {gfn};
 |) '<
-  +ps@(~`
+  +ps@~(`
     The quick brown fox jumps over the lazy dog.
     The quick brown fox jumps over the lazy dog.
     The quick brown fox jumps over the lazy dog.

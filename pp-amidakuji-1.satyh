@@ -26,7 +26,7 @@ let int-range =
 let-inline ctx \embed ib =
   ib
 
-let-inline-macro \amidakuji@(~s) =
+let-inline \amidakuji@ ~s =
   ~(let (drawns-0, inum-0, jnum-0) = Amidakuji.parse s in
     let () = display-message `DEBUG` in
     let () = drawns-0 |> List.iter display-drawn in  % for debug
