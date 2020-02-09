@@ -1,0 +1,23 @@
+@require: stdjareport
+
+let-inline ctx \NOTE note it =
+  let ib = read-inline ctx it in
+  let (_, hgt, _) = get-natural-metrics ib in
+  let pads = (0pt, 0pt, 0pt, 0pt) in
+  let decoH (x, y) w h d =
+    let () = register-text-annotation note false `Note` (x, y) w h d None in
+    []
+  in
+  let deco _ _ _ _ = [] in
+  let decoset = (decoH, deco, deco, deco) in
+  inline-frame-breakable pads decoset ib
+in
+
+document (|
+  title = {テキスト註釈};
+  author = {gfn};
+|) '<
+  +p{
+    \NOTE(`You can write a note like this.`){註釈のテストです．}
+  }
+>

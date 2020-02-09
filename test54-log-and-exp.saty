@@ -1,0 +1,14 @@
+@require: stdjareport
+
+let-inline \show-float x =
+  embed-string (show-float x)
+in
+
+document (|
+  title  = {指数と対数};
+  author = {gfn};
+|) '<
+  +p{ \show-float(exp (log 10.)); }
+  +p{ ${\log_{10} 2}:
+      \show-float(log 2. /. log 10.); }
+>
