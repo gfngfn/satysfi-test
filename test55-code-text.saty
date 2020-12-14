@@ -1,0 +1,17 @@
+@require: stdjareport
+
+document (|
+  title  = {Code Text};
+  author = {gfn};
+|) '<
+  +p{
+    軽量コード： `hello world`．
+    こんな感じで直接書けます．
+    勿論空白と所謂バッククォートも対応： [#`` <- space, ` <- back quote.``]
+  }
+  +p{
+    クラスファイル内で `set-code-text-command` というプリミティヴによって
+    挿入されるコマンドを指定できます．ここでは `stdjareport` 中で
+    `code` パッケージの `\code` を指定しています．
+  }
+>

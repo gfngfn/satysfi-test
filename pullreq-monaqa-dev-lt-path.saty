@@ -1,0 +1,36 @@
+@require: stdjareport
+@require: gr
+
+let-inline ctx \test deg =
+  let width = 1cm in
+  let height = 3cm in
+  inline-graphics width height 0pt (fun ((x, y) as pt) -> (
+    let path = Gr.polygon pt [(x +' width, y); (x +' width, y +' height)] in
+    let center = (x +' width *' 0.5, y +' height *' 0.5) in
+    let path-rotated = Gr.rotate-path center deg path in
+    [
+      stroke 0.5pt Color.black path;
+      stroke 1pt Color.red path-rotated;
+    ]
+  ))
+in
+
+document (|
+  title = {Linear Transformation by \@monaqa};
+  author = {gfn};
+  show-title = true;
+  show-toc = false;
+|) '<
+  +p{
+    ${30^\circ}: \test(30.0);
+  }
+  +p{
+    ${60^\circ}: \test(60.0);
+  }
+  +p{
+    ${120^\circ}: \test(120.0);
+  }
+  +p{
+    ${300^\circ}: \test(300.0);
+  }
+>

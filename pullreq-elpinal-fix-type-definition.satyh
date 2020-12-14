@@ -1,0 +1,16 @@
+% This program had been first written by @elpinal and was cited from https://github.com/gfngfn/SATySFi/pull/208
+
+module Hoge : sig
+  type 'a t
+end = struct
+  type 'a t = Hoge
+end
+
+module Fuga : sig
+  type 'a t
+  val get : 'a t -> 'a Hoge.t
+end = struct
+  type 'a t = C of 'a Hoge.t
+
+  let-rec get (C r) = r    % r should be of 'a Hoge.t but has 'a Fuga.t
+end
