@@ -1,0 +1,17 @@
+@require: stdjareport
+
+let-block ctx +file path =
+  let lines = read-file path in
+  lines |> List.fold-left (fun bb-acc line -> (
+    let ib = read-inline ctx (embed-string line) in
+    let bb = line-break true true ctx (ib ++ inline-fil) in
+    bb-acc +++ bb
+  )) block-nil
+in
+
+document (|
+  title = {`read-file`};
+  author = {gfn};
+|) '<
+  +file(`./test58-read-file.saty`);
+>
