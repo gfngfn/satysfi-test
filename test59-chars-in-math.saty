@@ -1,0 +1,32 @@
+@require: stdjareport
+
+let-block ctx +with f bt =
+  read-block (f ctx) bt
+
+let enable-direct-greek-lowercase cp-from cp-to cp-to-bold ctx =
+  ctx
+    |> set-math-variant-char MathItalic     cp-from cp-to
+    |> set-math-variant-char MathBoldItalic cp-from cp-to-bold
+    |> set-math-variant-char MathRoman      cp-from cp-to
+    |> set-math-variant-char MathBoldRoman  cp-from cp-to-bold
+    |> set-math-variant-char MathScript     cp-from cp-to
+    |> set-math-variant-char MathBoldScript cp-from cp-to-bold
+
+let enable-direct-greek ctx =
+  ctx
+    |> enable-direct-greek-lowercase 0x03B1 0x1D6FC 0x1D736 %αの設定
+    |> enable-direct-greek-lowercase 0x03B2 0x1D6FD 0x1D737 %βの設定
+    |> set-math-char 0x2297 0x2297 MathBin %⊗の設定
+    |> set-math-char 0x22A4 0x22A4 MathOrd %⊤の設定
+in
+
+document (|
+  title  = {`unicode-math`-like math};
+  author = {gfn};
+|) '<
+  +with(enable-direct-greek)<
+    +p{
+      ${\paren{α ⊗ β, \bm{α}^⊤\bm{β}, ab, \bm{ab}, a-b}}
+    }
+  >
+>
